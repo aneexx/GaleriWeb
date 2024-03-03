@@ -44,4 +44,62 @@ class FotoController extends Controller
         $jumlahLike = $detail->like->count();
         return view('user.detailFoto', compact('detail', 'jumlahLike'));
     }
+
+    public function editFoto($slug)
+    {
+        $foto = Foto::where('slug', $slug)->first();
+
+        return view('user.editFoto', compact('foto'));
+    }
+
+    public function updateFoto(Request $request, $slug)
+    {
+        try {
+            $request->validate([
+                'judul' => 'required',
+                'deskripsi' => 'required',
+                'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            $foto = Foto::where('slug', $slug)->first();
+
+            $foto->judul = ucwords($request->judul);
+            $foto->deskripsi = $request->deskripsi;
+
+            if ($request->hasFile('foto')) {
+                if ($foto->foto) {
+                    unlink(storage_path("app/public/{$foto->foto}"));
+                }
+
+                $file = $request->file('foto');
+                $fotoPath = $file->store('image', 'public');
+                $foto->foto = $fotoPath;
+            }
+
+            $foto->save();
+
+            return redirect()->route('foto-saya')->with('success', 'Berhasil Mengupdate Foto');
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->back()->with('error', 'Gagal Mengupdate Foto');
+        }
+    }
+
+    public function delete($slug)
+    {
+        try {
+            $foto = Foto::where('slug', $slug)->first();
+
+            if ($foto->foto) {
+                \Storage::disk('public')->delete($foto->foto);
+            }
+
+            $foto->delete();
+
+            return redirect()->route('foto-saya')->with('success', 'Berhasil Menghapus Foto');
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->route('foto-saya')->with('error', 'Gagal Menghapus Foto');
+        }
+    }
 }

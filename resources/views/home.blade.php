@@ -118,7 +118,6 @@
     <div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
         <a href="{{ route('detail-foto', $item->slug) }}" class="portfolio-item isotope-item gsap-reveal-img">
           <div class="overlay">
-              <span class="wrap-icon icon-link2"></span>
               <div class="portfolio-item-content">
                   <h3>{{ $item->judul }}</h3>
                   <p>{{ $item->user->name }}</p>

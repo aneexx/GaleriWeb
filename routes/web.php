@@ -29,6 +29,9 @@ Route::post('/addfoto', [FotoController::class, 'store'])->name('foto.store');
 Route::get('/foto-saya', [FotoSayaController::class, 'index'])->name('foto-saya');
 Route::get('detail-foto/{slug}', [FotoController::class, 'detailFoto'])->name('detail-foto');
 Route::get('detail-foto-saya/{slug}', [FotoSayaController::class, 'detailFotoSaya'])->name('detail-foto-saya');
+Route::get('/foto/{slug}/edit', [FotoController::class , 'editFoto'])->name('foto.edit');
+Route::put('/foto/{slug}', [FotoController::class, 'updateFoto'])->name('foto.update');
+Route::delete('/foto/{id}', [FotoController::class, 'delete'])->name('foto.delete');
 
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('comments/{id}', [CommentController::class, 'destroy'])->name('comments.delete');
